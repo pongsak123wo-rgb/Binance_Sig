@@ -1,4 +1,4 @@
-name: Binance Futures Crypto Scanner
+name: Binance Futures Crypto Scanner (24/7 Cloud)
 
 on:
   schedule:
@@ -23,9 +23,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Restore Cooldown Cache (4 Hours Memory)
+        uses: actions/cache/restore@v3
+        with:
+          path: sent_alerts.json
+          key: scanner-cooldown-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            scanner-cooldown-${{ runner.os }}-
+
       - name: Run Binance Scanner & Alert Telegram
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           python single_scan.py
+
+      - name: Save Cooldown Cache
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: sent_alerts.json
+          key: scanner-cooldown-${{ runner.os }}-${{ github.run_id }}

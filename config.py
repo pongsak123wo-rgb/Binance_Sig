@@ -32,5 +32,5 @@ MIN_24H_VOLUME_USDT = 5_000_000
 # Scanner Loop Interval (วินาที)
 SCAN_INTERVAL_SECONDS = 180  # สแกนทุกๆ 3 นาที
 
-# Cooldown แจ้งเตือนเหรียญเดิม (นาที) เพื่อไม่ให้ยิงเตือนซ้ำๆ
-ALERT_COOLDOWN_MINUTES = 60
+# Cooldown แจ้งเตือนเหรียญเดิม (นาที) เพื่อไม่ให้ยิงเตือนซ้ำซ้อนภายใน 4 ชั่วโมง (240 นาที)
+ALERT_COOLDOWN_MINUTES = 240
