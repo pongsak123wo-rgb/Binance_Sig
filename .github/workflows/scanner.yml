@@ -1,0 +1,31 @@
+name: Binance Futures Crypto Scanner
+
+on:
+  schedule:
+    # รันสแกนอัตโนมัติบน Cloud ทุกๆ 5 นาที (ไม่ต้องเปิดคอม)
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # อนุญาตให้กดสั่งรันด้วยมือบน GitHub ได้ตลอดเวลา
+
+jobs:
+  run-scanner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Binance Scanner & Alert Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python single_scan.py
